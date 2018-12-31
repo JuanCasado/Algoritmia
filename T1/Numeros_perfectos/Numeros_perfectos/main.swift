@@ -45,7 +45,7 @@ while true{
     print ("Insert a number to know if it is perfect (0 to exit)")
     guard let userInput = getNumber() else{ // Si lo introducido es algo no válido volvemos a pedir un número
         print ("end")
-        break
+        continue
     }
     guard userInput > 0 else{ // Introduciendo un 0 cancelamos la ejecución del programa sin errores
         print ("end")
