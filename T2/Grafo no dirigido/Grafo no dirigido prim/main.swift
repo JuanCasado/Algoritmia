@@ -44,7 +44,7 @@ func findPath (in data :[[Int]]) -> (graph: [[Int]],order: [arista]) {
         selected_graph[near[min_index]][min_index]=distance[min_index]
         selected_graph[min_index][near[min_index]]=distance[min_index]
         selected_order.append(arista.init(x: near[min_index], y: min_index, distance: distance[min_index]))
-        //Marcamos el nodo como tomado
+        //Marcamos el nodo como tomado para evitar bucles
         nodes[near[min_index]][min_index]=max
         distance[min_index]=max
         //Actualizamos el valor distancia poniendo el mínimo entre el valor que ya tenía para cada columna compardo

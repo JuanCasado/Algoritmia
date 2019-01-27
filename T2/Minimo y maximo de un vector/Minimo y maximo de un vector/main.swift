@@ -12,47 +12,34 @@ import Foundation
  De un array de datos se nos proporciona su valor máximo y mínimo.
  Se comparan solo 3/2 veces todos los datos.
  */
-func findMinMax(of data: [Int]) -> (min :Int,max :Int){
-    var values = ArraySlice<Int>.init(data)
-    let count = values.count
-    let half = count/2
+func findMinMax(of data: inout [Int]) -> (min :Int,max :Int){
+    let half = data.count/2
     for index in 0..<half{                           //Se realizan comparaciones con 1/2 de los valores
-        let opposite_index = count-1-index
-        if (values[index] > values[opposite_index]){
-            values.swapAt(index, opposite_index)
+        let opposite_index = data.count-1-index
+        if (data[index] > data[opposite_index]){
+            data.swapAt(index, opposite_index)
         }
     }//En la primera mitad del array aseguramos que está el valor mínimo y en la segurnda el valor máximo.
-    let min = findMin(of : Array(values[..<half]))  //Se realizan comparaciones con 1/2 de los valores
-    let max = findMax(of : Array(values[half...]))  //Se realizan comparaciones con 1/2 de los valores
+    //Se realizan comparaciones con 1/2 de los valores
+    let min = findBest(of : data, using : {d1, d2 in d1 < d2}, from: 0, to: half)
+    //Se realizan comparaciones con 1/2 de los valores
+    let max = findBest(of : data, using : {d1, d2 in d1 > d2}, from: half, to: data.count)
     return (min,max)
 }
 
 /**
- De un array de datos se nos proporciona su valor máximo.
- Se comparan todos los datos.
+ De un array de datos se nos proporciona su mejor valor para la función de optimización proporcionada entre el rango indicado.
+ Se comparan todos los datos en el rango indicado.
  */
-func findMax(of values: [Int]) -> Int {
-    var max = values.first!
-    for value in values{
-        if (value > max){
-            max = value
+func findBest(of values: [Int], using comparator : (Int,Int)->Bool, from start_point : Int = 0, to end_point : Int) -> Int {
+    var best = values.first!
+    for index in start_point ..< end_point{
+        let value = values[index]
+        if (comparator(value, best)){
+            best = value
         }
     }
-    return max
-}
-
-/**
- De un array de datos se nos proporciona su valor mínimo.
- Se comparan todos los datos.
- */
-func findMin(of values: [Int]) -> Int {
-    var min = values.first!
-    for value in values{
-        if (value < min){
-            min = value
-        }
-    }
-    return min
+    return best
 }
 
 var data = [Int].init()
@@ -66,6 +53,7 @@ for number in data{
     str+=String(number)+","
 }
 print (str)
-let result = findMinMax(of: data)
+//Realizamos el cálculo
+let result = findMinMax(of: &data)
 print ("El valor maximo es \(result.max) y el mínimo es \(result.min)")
 
